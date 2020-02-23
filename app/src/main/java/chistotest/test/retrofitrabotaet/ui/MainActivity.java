@@ -2,13 +2,19 @@ package chistotest.test.retrofitrabotaet.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Service;
 import android.os.Bundle;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
+import java.text.DateFormat;
 import java.util.List;
 
 import chistotest.test.retrofitrabotaet.R;
+import chistotest.test.retrofitrabotaet.api.ServiceGenerator;
 import chistotest.test.retrofitrabotaet.api.model.GitHubRepo;
 import chistotest.test.retrofitrabotaet.api.service.GitHubClient;
 import chistotest.test.retrofitrabotaet.ui.adapter.GitHubRepoAdapter;
@@ -29,13 +35,7 @@ public class MainActivity extends AppCompatActivity {
 
         listView = (ListView) findViewById(R.id.pagination_list);
 
-        Retrofit.Builder builder = new Retrofit.Builder()
-                .baseUrl("https://api.github.com/")
-                .addConverterFactory(GsonConverterFactory.create());
-
-        Retrofit retrofit = builder.build();
-
-        GitHubClient client = retrofit.create(GitHubClient.class);
+        GitHubClient client = ServiceGenerator.createService(GitHubClient.class); // Мой ServiceGenerator
         Call<List<GitHubRepo>> call = client.reposForUser("dedushkaded");
 
         call.enqueue(new Callback<List<GitHubRepo>>() {
